@@ -44,3 +44,34 @@ function getStaticOrders($num = 1)
 	return $data;
 }
 
+function getConnection()
+{
+	static $link = NULL;
+	if ($link === NULL) {
+		$link = mysqli_connect('localhost', 'root', '', 'php1');
+	}
+	return $link;	
+}
+
+function getQuote()
+{
+	return "'";
+}
+
+// SELECT `id`,`firstname`,`lastname` FROM `customers` WHERE x=y 
+// $where = [key = column name, value = data]
+// $andOr = AND | OR
+function getCustomers(array $where = array(), $andOr = 'AND')
+{
+	$query = 'SELECT `id`,`firstname`,`lastname` FROM `customers`';
+	if ($where) {
+		$query .= ' WHERE ';
+		foreach ($where as $column => $value) {
+			$query .= $column . ' = ' . getQuote() . $value . getQuote() . ' ' . $andOr;
+		}
+		$query = substr($query, 0, -(strlen($andOr)));
+	}
+	$link = getConnection();
+	$result = mysqli_query($link, $query);
+	return mysqli_fetch_all($result);
+}
