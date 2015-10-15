@@ -48,7 +48,7 @@ function getConnection()
 {
 	static $link = NULL;
 	if ($link === NULL) {
-		$link = mysqli_connect('localhost', 'root', '', 'php1');
+		$link = mysqli_connect('127.0.0.1', 'root', '', 'php1');
 	}
 	return $link;	
 }
